@@ -1,13 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Category Filter Example</title>
+    <title>Website with Menu + Category Filter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
+            margin: 0;
         }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Side menu panel */
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            right: 0;
+            background-color: #222;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+        }
+
+        .side-menu a {
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .side-menu a:hover {
+            background: #444;
+        }
+
+        .side-menu .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Category filter styling */
         .buttons {
             margin-bottom: 20px;
         }
@@ -24,7 +75,7 @@
             background: #555;
         }
         .buttons button.active {
-            background: #ff6600; /* Highlight color */
+            background: #ff6600;
         }
         .item {
             display: inline-block;
@@ -34,31 +85,54 @@
             border-radius: 5px;
             width: 150px;
         }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Category Filter</h1>
-
-    <!-- Filter Buttons -->
-    <div class="buttons" id="filterButtons">
-        <button class="active" onclick="filterSelection('all', this)"> Show All </button>
-        <button onclick="filterSelection('fruit', this)"> Fruits </button>
-        <button onclick="filterSelection('vegetable', this)"> Vegetables </button>
-        <button onclick="filterSelection('drink', this)"> Drinks </button>
+    <!-- Top bar -->
+    <div class="topbar">
+        <h2>My Website</h2>
+        <span class="menu-icon" onclick="openMenu()">⋮</span>
     </div>
 
-    <!-- Items -->
-    <div id="items">
-        <div class="item fruit">🍎 Apple</div>
-        <div class="item fruit">🍌 Banana</div>
-        <div class="item vegetable">🥕 Carrot</div>
-        <div class="item vegetable">🥦 Broccoli</div>
-        <div class="item drink">🥤 Cola</div>
-        <div class="item drink">☕ Coffee</div>
+    <!-- Side menu -->
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">×</span>
+        <a href="#">Home</a>
+        <a href="#category">Category</a>
+        <a href="#trending">Trending</a>
     </div>
+
+    <!-- Main content -->
+    <main>
+        <h1>Category Filter</h1>
+
+        <!-- Filter Buttons -->
+        <div class="buttons" id="filterButtons">
+            <button class="active" onclick="filterSelection('all', this)"> Show All </button>
+            <button onclick="filterSelection('fruit', this)"> Fruits </button>
+            <button onclick="filterSelection('vegetable', this)"> Vegetables </button>
+            <button onclick="filterSelection('drink', this)"> Drinks </button>
+        </div>
+
+        <!-- Items -->
+        <div id="items">
+            <div class="item fruit">🍎 Apple</div>
+            <div class="item fruit">🍌 Banana</div>
+            <div class="item vegetable">🥕 Carrot</div>
+            <div class="item vegetable">🥦 Broccoli</div>
+            <div class="item drink">🥤 Cola</div>
+            <div class="item drink">☕ Coffee</div>
+        </div>
+    </main>
 
     <script>
+        // Category filter
         function filterSelection(category, btn) {
             let items = document.getElementsByClassName("item");
             if (category === "all") category = "";
@@ -71,10 +145,18 @@
                 }
             }
 
-            // Highlight active button
             let buttons = document.querySelectorAll("#filterButtons button");
             buttons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
+        }
+
+        // Menu control
+        function openMenu() {
+            document.getElementById("sideMenu").style.width = "250px";
+        }
+
+        function closeMenu() {
+            document.getElementById("sideMenu").style.width = "0";
         }
     </script>
 
