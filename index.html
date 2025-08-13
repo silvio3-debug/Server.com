@@ -51,13 +51,12 @@
       background-color: #f44336;
       color: white;
     }
-    .heart {
+    .falling {
       position: absolute;
-      font-size: 24px;
-      animation: rainDown 4s linear forwards;
+      animation: fallDown 4s linear forwards;
       opacity: 0;
     }
-    @keyframes rainDown {
+    @keyframes fallDown {
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
@@ -143,7 +142,7 @@
 
   let currentQuestion = 0;
   let heartRainInterval;
-  let noClickCount = 0; // Tracks how many times No is pressed
+  let noClickCount = 0;
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const bigMessage = document.getElementById("bigMessage");
@@ -191,10 +190,10 @@
   }
 
   function startHeartRain() {
-    let intervalSpeed = Math.max(50, 150 - noClickCount * 10); // Faster each time
+    let intervalSpeed = Math.max(50, 150 - noClickCount * 10);
     heartRainInterval = setInterval(() => {
       const heart = document.createElement("div");
-      heart.classList.add("heart");
+      heart.classList.add("falling");
       heart.textContent = "💗";
       heart.style.left = Math.random() * window.innerWidth + "px";
       heart.style.top = "-30px";
@@ -209,9 +208,10 @@
   }
 
   function launchCelebration() {
+    // Hearts
     setInterval(() => {
       const heart = document.createElement("div");
-      heart.classList.add("heart");
+      heart.classList.add("falling");
       heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];
       heart.style.left = Math.random() * window.innerWidth + "px";
       heart.style.top = "-30px";
@@ -220,6 +220,21 @@
       setTimeout(() => heart.remove(), 4000);
     }, 150);
 
+    // Kittens
+    setInterval(() => {
+      const kitten = document.createElement("img");
+      kitten.src = "https://placekitten.com/50/50";
+      kitten.classList.add("falling");
+      kitten.style.left = Math.random() * window.innerWidth + "px";
+      kitten.style.top = "-50px";
+      kitten.style.width = "50px";
+      kitten.style.height = "50px";
+      kitten.style.borderRadius = "8px";
+      document.body.appendChild(kitten);
+      setTimeout(() => kitten.remove(), 5000);
+    }, 400);
+
+    // Confetti
     const duration = 5 * 1000;
     const end = Date.now() + duration;
     (function frame() {
