@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Website with Side Menu + Category Filter</title>
+    <title>Category Filter Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +16,6 @@
             color: white;
             padding: 10px 15px;
         }
-
         .menu-icon {
             font-size: 24px;
             cursor: pointer;
@@ -36,7 +35,6 @@
             transition: 0.3s;
             padding-top: 60px;
         }
-
         .side-menu a {
             padding: 10px 20px;
             text-decoration: none;
@@ -45,11 +43,9 @@
             display: block;
             transition: 0.2s;
         }
-
         .side-menu a:hover {
             background: #444;
         }
-
         .side-menu .close-btn {
             position: absolute;
             top: 15px;
@@ -125,7 +121,7 @@
 
     <!-- Main content -->
     <main>
-        <h1>Category Filter</h1>
+        <h1 id="category">Category Filter</h1>
 
         <!-- Filter Buttons -->
         <div class="buttons" id="filterButtons">
@@ -170,7 +166,6 @@
             document.getElementById("sideMenu").style.width = "250px";
             document.getElementById("overlay").style.display = "block";
         }
-
         function closeMenu() {
             document.getElementById("sideMenu").style.width = "0";
             document.getElementById("overlay").style.display = "none";
