@@ -12,6 +12,7 @@
       font-family: Arial, sans-serif;
       position: relative;
     }
+
     #questionBox {
       position: absolute;
       background: white;
@@ -21,6 +22,7 @@
       text-align: center;
       max-width: 300px;
     }
+
     #bigMessage {
       font-size: 2rem;
       color: red;
@@ -34,6 +36,7 @@
       transform: translate(-50%, -50%);
       z-index: 10;
     }
+
     button {
       margin: 8px;
       padding: 10px 16px;
@@ -42,6 +45,7 @@
       cursor: pointer;
       font-size: 1rem;
     }
+
     .yesBtn {
       background-color: #4CAF50;
       color: white;
@@ -50,31 +54,56 @@
       background-color: #f44336;
       color: white;
     }
-    .heart, .kittenFall {
+
+    .heart {
       position: absolute;
-      animation: fall 4s linear forwards;
+      font-size: 24px;
+      animation: rainDown 4s linear forwards;
       opacity: 0;
     }
-    @keyframes fall {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(100vh); opacity: 0; }
+
+    @keyframes rainDown {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
-    #footerNote {
+
+    .madeBy {
       position: fixed;
       bottom: 10px;
       right: 10px;
-      font-family: 'Georgia', serif;
-      font-size: 1.2rem;
-      color: gold;
+      font-size: 1.1rem;
       font-weight: bold;
-      text-shadow: 0 0 5px #fff, 0 0 10px gold, 0 0 20px gold;
-      animation: shine 2s infinite;
-      z-index: 20;
+      background: linear-gradient(90deg, gold, orange, gold);
+      background-size: 200% auto;
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      animation: shine 3s linear infinite;
     }
+
     @keyframes shine {
-      0% { text-shadow: 0 0 5px #fff, 0 0 10px gold, 0 0 20px gold; }
-      50% { text-shadow: 0 0 10px #fff, 0 0 20px gold, 0 0 40px gold; }
-      100% { text-shadow: 0 0 5px #fff, 0 0 10px gold, 0 0 20px gold; }
+      to { background-position: 200% center; }
+    }
+
+    #kitten {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      background: url('https://i.ibb.co/h94xxJg/kitten.png') no-repeat center/contain;
+      z-index: 5;
+    }
+
+    .paw {
+      position: absolute;
+      font-size: 16px;
+      opacity: 0.6;
+      animation: fadePaw 1s linear forwards;
+    }
+
+    @keyframes fadePaw {
+      from { opacity: 0.6; }
+      to { opacity: 0; }
     }
   </style>
 </head>
@@ -87,7 +116,8 @@
 </div>
 
 <div id="bigMessage">You made me the happiest man in life ❤️</div>
-<div id="footerNote">💍 Made by Silvio for his little princess 💍</div>
+<div class="madeBy">💍 Made by Silvio for his little princess</div>
+<div id="kitten"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
@@ -98,17 +128,19 @@
   ];
 
   const sadMessages = [
-    "Why? 😢", "Please :3", "Please my loveeeeeeeeeee 🥺", "Nooo don't say that 😭",
-    "You break my heart 💔", "Come on, just say yes 😘", "I’ll cry... 😭", "Pretty please ❤️",
-    "Think about the kittens 🐱", "What if I give you chocolate? 🍫", "My heart can't take this 😔",
-    "Don't make me beg on my knees 🙇‍♂️", "I'll give you all the cuddles 🥰",
-    "But I baked cookies for you 🍪", "Say yes and I’ll be your personal chef 👨‍🍳"
+    "Why? 😢","Please :3","Please my loveeeeeeeeeee 🥺","Nooo don't say that 😭","You break my heart 💔",
+    "Come on, just say yes 😘","I’ll cry... 😭","Pretty please ❤️","You’re killing me softly 😭",
+    "One little yes won’t hurt 😏","Think about our future 🏡","Don’t do me like this 😭",
+    "How could you say no to this face 🥹","I’ll be sad forever 😭","Just once, pleaaase ❤️"
   ];
 
   let currentQuestion = 0;
+  let chasingHearts = false;
+
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const bigMessage = document.getElementById("bigMessage");
+  const kitten = document.getElementById("kitten");
 
   function handleYes() {
     currentQuestion++;
@@ -118,6 +150,7 @@
       questionBox.style.display = "none";
       bigMessage.style.display = "block";
       launchCelebration();
+      chasingHearts = true;
     }
   }
 
@@ -129,7 +162,7 @@
       questionText.style.color = "black";
       questionText.textContent = questions[currentQuestion];
       moveQuestionBox();
-    }, 1200);
+    }, 1000);
   }
 
   function moveQuestionBox() {
@@ -140,8 +173,74 @@
   }
 
   function launchCelebration() {
-    // Hearts falling
     setInterval(() => {
       const heart = document.createElement("div");
       heart.classList.add("heart");
-      heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];*]()
+      heart.textContent = ["❤️","💖","💕","💘","💓"][Math.floor(Math.random()*5)];
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = "-30px";
+      heart.style.fontSize = Math.random() * 20 + 20 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }, 150);
+
+    const duration = 5 * 1000;
+    const end = Date.now() + duration;
+    (function frame() {
+      confetti({particleCount: 5, angle: 60, spread: 55, origin: {x: 0}});
+      confetti({particleCount: 5, angle: 120, spread: 55, origin: {x: 1}});
+      if (Date.now() < end) requestAnimationFrame(frame);
+    })();
+  }
+
+  // Kitten roaming & chasing
+  let kittenX = 100, kittenY = 100;
+  function moveKitten() {
+    let targetX = Math.random() * (window.innerWidth - 60);
+    let targetY = Math.random() * (window.innerHeight - 60);
+
+    if (chasingHearts) {
+      const heart = document.querySelector(".heart");
+      if (heart) {
+        const rect = heart.getBoundingClientRect();
+        targetX = rect.left;
+        targetY = rect.top;
+      }
+    }
+
+    const stepX = (targetX - kittenX) / 60;
+    const stepY = (targetY - kittenY) / 60;
+    let steps = 0;
+
+    function step() {
+      kittenX += stepX;
+      kittenY += stepY;
+      kitten.style.left = kittenX + "px";
+      kitten.style.top = kittenY + "px";
+
+      const paw = document.createElement("div");
+      paw.classList.add("paw");
+      paw.textContent = "🐾";
+      paw.style.left = kittenX + 20 + "px";
+      paw.style.top = kittenY + 40 + "px";
+      document.body.appendChild(paw);
+      setTimeout(() => paw.remove(), 1000);
+
+      steps++;
+      if (steps < 60) {
+        requestAnimationFrame(step);
+      } else {
+        setTimeout(moveKitten, 500);
+      }
+    }
+    step();
+  }
+
+  moveKitten();
+
+  questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
+  questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
+</script>
+
+</body>
+</html>
