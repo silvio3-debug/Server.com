@@ -20,6 +20,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
+      transition: transform 0.2s, opacity 0.5s;
     }
     #bigMessage {
       font-size: 2rem;
@@ -60,6 +61,20 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
+    }
+    .shake {
+      animation: shake 0.4s;
+    }
+    .fade {
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
@@ -79,6 +94,18 @@
     "Do you want to be my wife?",
     "Will you be forever mine?"
   ];
+
+  const sadMessages = [
+    "Why? 😢",
+    "Please :3",
+    "Please my loveeeeeeeeeee 🥺",
+    "Nooo don't say that 😭",
+    "You break my heart 💔",
+    "Come on, just say yes 😘",
+    "I’ll cry... 😭",
+    "Pretty please ❤️"
+  ];
+
   let currentQuestion = 0;
 
   const questionBox = document.getElementById("questionBox");
@@ -96,33 +123,32 @@
     }
   }
 
-    function handleNo() {
-  // Show a random sad message
-  const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-  questionText.textContent = randomSad;
+  function handleNo() {
+    const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
+    
+    // Fade out
+    questionText.classList.add("fade");
+    
+    setTimeout(() => {
+      // Change to silly text and shake
+      questionText.textContent = randomSad;
+      questionBox.classList.add("shake");
+      questionText.classList.remove("fade");
+    }, 500);
 
-  // After a short delay, switch back to the real question
-  setTimeout(() => {
-    questionText.textContent = questions[currentQuestion];
-    // Removed moveQuestionBox(); so it stays in the same spot
-  }, 1000);
-}
+    // After delay, fade out silly text and restore main question
+    setTimeout(() => {
+      questionText.classList.add("fade");
+      questionBox.classList.remove("shake");
+    }, 1500);
+
+    setTimeout(() => {
+      questionText.textContent = questions[currentQuestion];
+      questionText.classList.remove("fade");
+    }, 2000);
   }
 
-  function moveQuestionBox() {
-    const maxX = window.innerWidth - questionBox.offsetWidth;
-    const maxY = window.innerHeight - questionBox.offsetHeight;
-
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-
-    questionBox.style.left = `${randomX}px`;
-    questionBox.style.top = `${randomY}px`;
-  }
-
-  // Celebration function
   function launchCelebration() {
-    // Hearts raining down
     setInterval(() => {
       const heart = document.createElement("div");
       heart.classList.add("heart");
@@ -134,35 +160,19 @@
       setTimeout(() => heart.remove(), 4000);
     }, 150);
 
-    // Confetti blast for 5 seconds
     const duration = 5 * 1000;
     const end = Date.now() + duration;
 
     (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+      if (Date.now() < end) requestAnimationFrame(frame);
     }());
   }
 
-  // Start in the middle
   questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
   questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
 </script>
 
 </body>
 </html>
-
