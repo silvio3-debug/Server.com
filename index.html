@@ -79,18 +79,6 @@
     "Do you want to be my wife?",
     "Will you be forever mine?"
   ];
-
-  const sadMessages = [
-    "Why? 😢",
-    "Please :3",
-    "Please my loveeeeeeeeeee 🥺",
-    "Nooo don't say that 😭",
-    "You break my heart 💔",
-    "Come on, just say yes 😘",
-    "I’ll cry... 😭",
-    "Pretty please ❤️"
-  ];
-
   let currentQuestion = 0;
 
   const questionBox = document.getElementById("questionBox");
@@ -109,15 +97,7 @@
   }
 
   function handleNo() {
-    // Show a random sad message
-    const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-    questionText.textContent = randomSad;
-
-    // Move the box after a short delay
-    setTimeout(() => {
-      questionText.textContent = questions[currentQuestion];
-      moveQuestionBox();
-    }, 1000);
+    moveQuestionBox();
   }
 
   function moveQuestionBox() {
@@ -131,6 +111,7 @@
     questionBox.style.top = `${randomY}px`;
   }
 
+  // Celebration function
   function launchCelebration() {
     // Hearts raining down
     setInterval(() => {
