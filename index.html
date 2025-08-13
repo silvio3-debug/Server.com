@@ -52,8 +52,8 @@
     }
     .heart {
       position: absolute;
-      font-size: 24px;
       animation: floatUp 4s linear infinite;
+      pointer-events: none;
     }
     @keyframes floatUp {
       0% { transform: translateY(0) scale(1); opacity: 1; }
@@ -110,24 +110,23 @@
     questionBox.style.top = `${randomY}px`;
   }
 
-  // Celebration function
   function launchCelebration() {
-    // Hearts
+    // Hearts floating
+    const heartColors = ["❤️", "💖", "💘", "💝", "💕", "💓"];
     setInterval(() => {
       const heart = document.createElement("div");
       heart.classList.add("heart");
-      heart.textContent = "❤️";
+      heart.textContent = heartColors[Math.floor(Math.random() * heartColors.length)];
       heart.style.left = Math.random() * window.innerWidth + "px";
       heart.style.top = window.innerHeight + "px";
       heart.style.fontSize = Math.random() * 20 + 20 + "px";
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 4000);
-    }, 200);
+    }, 150);
 
     // Confetti
-    const duration = 5 * 1000;
+    const duration = 6 * 1000;
     const end = Date.now() + duration;
-
     (function frame() {
       confetti({
         particleCount: 5,
@@ -141,14 +140,13 @@
         spread: 55,
         origin: { x: 1 }
       });
-
       if (Date.now() < end) {
         requestAnimationFrame(frame);
       }
-    }());
+    })();
   }
 
-  // Start in the middle
+  // Center starting position
   questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
   questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
 </script>
