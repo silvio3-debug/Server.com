@@ -20,7 +20,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
-      transition: left 0.2s ease, top 0.2s ease;
     }
     #bigMessage {
       font-size: 2rem;
@@ -34,10 +33,6 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
-    }
-    #questionText.sad {
-      color: deeppink;
-      font-style: italic;
     }
     button {
       margin: 8px;
@@ -65,6 +60,33 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
+    /* Corner text styling */
+    #cornerText {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 14px;
+      color: white;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+    /* Ring shine effect */
+    .shine-ring {
+      display: inline-block;
+      background: linear-gradient(90deg, gold, white, gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200%;
+    }
+    @keyframes shine {
+      0% { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+    .sparkle {
+      animation: shine 1s linear;
+    }
   </style>
 </head>
 <body>
@@ -76,6 +98,10 @@
 </div>
 
 <div id="bigMessage">You made me the happiest man in life ❤️</div>
+
+<div id="cornerText">
+  Made by Silvio for his little princess <span class="shine-ring">💍</span>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
@@ -93,7 +119,13 @@
     "You break my heart 💔",
     "Come on, just say yes 😘",
     "I’ll cry... 😭",
-    "Pretty please ❤️"
+    "Pretty please ❤️",
+    "Think again... 🥹",
+    "Don't be mean 🥺👉👈",
+    "Just once, say yes 😍",
+    "You know you want to 😏",
+    "Please? Pretty please? 🥰",
+    "I'm begginggggggg 🫠"
   ];
 
   let currentQuestion = 0;
@@ -103,7 +135,6 @@
   const bigMessage = document.getElementById("bigMessage");
 
   function handleYes() {
-    questionText.classList.remove("sad");
     currentQuestion++;
     if (currentQuestion < questions.length) {
       questionText.textContent = questions[currentQuestion];
@@ -115,4 +146,80 @@
   }
 
   function handleNo() {
-    const randomSad = sadMessages[Math.floor(Math.random() * sa*]()
+    // Show a random sad message in pink
+    const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
+    questionText.style.color = "deeppink";
+    questionText.textContent = randomSad;
+
+    // Move after a short delay
+    setTimeout(() => {
+      questionText.style.color = "black";
+      questionText.textContent = questions[currentQuestion];
+      moveQuestionBox();
+    }, 1000);
+  }
+
+  function moveQuestionBox() {
+    const maxX = window.innerWidth - questionBox.offsetWidth;
+    const maxY = window.innerHeight - questionBox.offsetHeight;
+
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+
+    questionBox.style.left = `${randomX}px`;
+    questionBox.style.top = `${randomY}px`;
+  }
+
+  function launchCelebration() {
+    // Hearts raining down
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = "-30px";
+      heart.style.fontSize = Math.random() * 20 + 20 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }, 150);
+
+    // Confetti blast for 5 seconds
+    const duration = 5 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
+  }
+
+  // Start centered
+  questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
+  questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
+
+  // Ring sparkle effect every 3 seconds
+  const ring = document.querySelector(".shine-ring");
+  setInterval(() => {
+    ring.classList.add("sparkle");
+    setTimeout(() => {
+      ring.classList.remove("sparkle");
+    }, 1000);
+  }, 3000);
+</script>
+
+</body>
+</html>
