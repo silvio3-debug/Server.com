@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Website with Menu + Category Filter</title>
+    <title>Website with Side Menu + Category Filter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,6 @@
         .topbar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             background: #333;
             color: white;
             padding: 10px 15px;
@@ -21,6 +20,7 @@
         .menu-icon {
             font-size: 24px;
             cursor: pointer;
+            margin-right: 15px;
         }
 
         /* Side menu panel */
@@ -30,7 +30,7 @@
             position: fixed;
             z-index: 1000;
             top: 0;
-            right: 0;
+            left: 0;
             background-color: #222;
             overflow-x: hidden;
             transition: 0.3s;
@@ -56,6 +56,18 @@
             right: 20px;
             font-size: 28px;
             cursor: pointer;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
         }
 
         /* Category filter styling */
@@ -94,11 +106,8 @@
 </head>
 <body>
 
-    <!-- Top bar -->
-    <div class="topbar">
-        <h2>My Website</h2>
-        <span class="menu-icon" onclick="openMenu()">⋮</span>
-    </div>
+    <!-- Overlay -->
+    <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
     <!-- Side menu -->
     <div id="sideMenu" class="side-menu">
@@ -106,6 +115,12 @@
         <a href="#">Home</a>
         <a href="#category">Category</a>
         <a href="#trending">Trending</a>
+    </div>
+
+    <!-- Top bar -->
+    <div class="topbar">
+        <span class="menu-icon" onclick="openMenu()">☰</span>
+        <h2>My Website</h2>
     </div>
 
     <!-- Main content -->
@@ -153,10 +168,12 @@
         // Menu control
         function openMenu() {
             document.getElementById("sideMenu").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
         }
 
         function closeMenu() {
             document.getElementById("sideMenu").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
         }
     </script>
 
