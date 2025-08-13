@@ -21,6 +21,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
+      transition: opacity 0.5s ease;
     }
 
     #bigMessage {
@@ -90,7 +91,7 @@
       width: 60px;
       height: 60px;
       pointer-events: none;
-      background: url('https://i.ibb.co/YLxZGBm/kitten-pixel.png') no-repeat center/contain;
+      background: url('https://i.ibb.co/wcVd4Mf/pixel-kitten.png') no-repeat center/contain;
       z-index: 5;
     }
 
@@ -131,7 +132,8 @@
     "Why? 😢","Please :3","Please my loveeeeeeeeeee 🥺","Nooo don't say that 😭","You break my heart 💔",
     "Come on, just say yes 😘","I’ll cry... 😭","Pretty please ❤️","You’re killing me softly 😭",
     "One little yes won’t hurt 😏","Think about our future 🏡","Don’t do me like this 😭",
-    "How could you say no to this face 🥹","I’ll be sad forever 😭","Just once, pleaaase ❤️"
+    "How could you say no to this face 🥹","I’ll be sad forever 😭","Just once, pleaaase ❤️",
+    "It would mean the world to me 🌍","I can't live without your yes 💖"
   ];
 
   let currentQuestion = 0;
@@ -157,12 +159,20 @@
   function handleNo() {
     const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
     questionText.style.color = "deeppink";
-    questionText.textContent = randomSad;
+    questionText.style.opacity = 0;
     setTimeout(() => {
-      questionText.style.color = "black";
-      questionText.textContent = questions[currentQuestion];
-      moveQuestionBox();
-    }, 1000);
+      questionText.textContent = randomSad;
+      questionText.style.opacity = 1;
+      setTimeout(() => {
+        questionText.style.opacity = 0;
+        setTimeout(() => {
+          questionText.style.color = "black";
+          questionText.textContent = questions[currentQuestion];
+          questionText.style.opacity = 1;
+          moveQuestionBox();
+        }, 500);
+      }, 800);
+    }, 500);
   }
 
   function moveQuestionBox() {
@@ -193,7 +203,7 @@
     })();
   }
 
-  // Kitten roaming & chasing random hearts
+  // Kitten roaming & chasing hearts
   let kittenX = 100, kittenY = 100;
   function moveKitten() {
     let targetX = Math.random() * (window.innerWidth - 60);
