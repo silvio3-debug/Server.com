@@ -107,9 +107,115 @@
             document.getElementById("overlay").style.display = "none";
         }
     </script>
+<!-- Chat Widget -->
+<style>
+    #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    #chat-header {
+        background: #333;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+    }
+    #chat-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        height: 200px;
+        font-size: 14px;
+    }
+    #chat-input {
+        display: flex;
+    }
+    #chat-input input {
+        flex: 1;
+        border: none;
+        padding: 10px;
+        outline: none;
+    }
+    #chat-input button {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+    #chat-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+</style>
+
+<button id="chat-toggle">💬</button>
+
+<div id="chat-container">
+    <div id="chat-header">AI Chatbot</div>
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+        <input type="text" id="message-input" placeholder="Type a message...">
+        <button id="send-btn">Send</button>
+    </div>
+</div>
+
+<script>
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatContainer = document.getElementById('chat-container');
+    const chatMessages = document.getElementById('chat-messages');
+    const sendBtn = document.getElementById('send-btn');
+    const messageInput = document.getElementById('message-input');
+
+    chatToggle.onclick = () => {
+        chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+    };
+
+    sendBtn.onclick = sendMessage;
+    messageInput.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        addMessage("You", message);
+        messageInput.value = "";
+
+        // Fake AI response for now
+        setTimeout(() => {
+            addMessage("AI", "You said: " + message);
+        }, 500);
+    }
+
+    function addMessage(sender, text) {
+        const msg = document.createElement("div");
+        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        chatMessages.appendChild(msg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+</script>
 
 </body>
 </html>
 
 </html>
+
 
