@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Special Question</title>
   <style>
     body {
@@ -44,23 +45,21 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    .yesBtn {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .noBtn {
-      background-color: #f44336;
-      color: white;
-    }
+    .yesBtn { background-color: #4CAF50; color: white; }
+    .noBtn  { background-color: #f44336; color: white; }
+
     .falling {
       position: absolute;
       animation: fallDown 4s linear forwards;
       opacity: 0;
+      z-index: 9;
     }
     @keyframes fallDown {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
+
+    /* Luxurious corner text */
     #cornerText {
       position: fixed;
       bottom: 10px;
@@ -81,10 +80,7 @@
       0% { background-position: 0% center; }
       100% { background-position: 200% center; }
     }
-    .ring-wrapper {
-      position: relative;
-      display: inline-block;
-    }
+    .ring-wrapper { position: relative; display: inline-block; }
     .sparkle {
       position: absolute;
       top: -5px;
@@ -99,14 +95,12 @@
       80%  { opacity: 1; }
       100% { opacity: 0; transform: translate(20px, -20px) rotate(180deg); }
     }
-    /* Wedding scene */
+
+    /* Wedding scene layer (hidden until final YES) */
     #weddingScene {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background-size: cover;
       background-position: center;
       z-index: 1;
@@ -158,6 +152,7 @@
   let currentQuestion = 0;
   let heartRainInterval;
   let noClickCount = 0;
+
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const bigMessage = document.getElementById("bigMessage");
@@ -200,8 +195,8 @@
     const maxY = window.innerHeight - questionBox.offsetHeight;
     const randomX = Math.floor(Math.random() * maxX);
     const randomY = Math.floor(Math.random() * maxY);
-    questionBox.style.left = ${randomX}px;
-    questionBox.style.top = ${randomY}px;
+    questionBox.style.left = `${randomX}px`;
+    questionBox.style.top = `${randomY}px`;
   }
 
   function startHeartRain() {
@@ -217,14 +212,96 @@
       setTimeout(() => heart.remove(), 4000);
     }, intervalSpeed);
   }
-
-  function stopHeartRain() {
-    clearInterval(heartRainInterval);
-  }
+  function stopHeartRain() { clearInterval(heartRainInterval); }
 
   function showWeddingScene() {
-    weddingScene.style.backgroundImage = "url('https://i.ibb.co/7XWcK8d/cartoon-wedding-church.png')";
+    // Inline SVG wedding scene (cute pastel church) encoded at runtime
+    const svg = `
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'>
+  <defs>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#ffe8f3'/>
+      <stop offset='1' stop-color='#ffd6e8'/>
+    </linearGradient>
+    <linearGradient id='grass' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#dff6e1'/>
+      <stop offset='1' stop-color='#bff0c4'/>
+    </linearGradient>
+    <linearGradient id='carpet' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#ff6b81'/>
+      <stop offset='1' stop-color='#ff3b58'/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky and ground -->
+  <rect width='1200' height='520' fill='url(#sky)'/>
+  <rect y='520' width='1200' height='280' fill='url(#grass)'/>
+
+  <!-- Aisle carpet -->
+  <polygon points='500,800 700,800 630,520 570,520' fill='url(#carpet)' opacity='0.9'/>
+
+  <!-- Church body -->
+  <g>
+    <rect x='400' y='260' width='400' height='260' fill='#ffffff' stroke='#e8c9d9' stroke-width='4' rx='8'/>
+    <!-- Door -->
+    <rect x='560' y='420' width='80' height='100' fill='#8b5e3c' rx='6' />
+    <circle cx='632' cy='470' r='4' fill='#f3d9b1'/>
+    <!-- Windows -->
+    <rect x='440' y='320' width='60' height='80' fill='#c7e7ff' stroke='#a8d7ff' stroke-width='4' rx='10'/>
+    <rect x='700' y='320' width='60' height='80' fill='#c7e7ff' stroke='#a8d7ff' stroke-width='4' rx='10'/>
+  </g>
+
+  <!-- Roof -->
+  <polygon points='400,260 800,260 600,160' fill='#ffd2df' stroke='#e8c9d9' stroke-width='4'/>
+
+  <!-- Steeple -->
+  <g>
+    <rect x='560' y='120' width='80' height='80' fill='#ffffff' stroke='#e8c9d9' stroke-width='4'/>
+    <polygon points='560,120 640,120 600,80' fill='#ffd2df' stroke='#e8c9d9' stroke-width='4'/>
+    <!-- Cross -->
+    <rect x='597' y='60' width='6' height='20' fill='#d49ac2'/>
+    <rect x='590' y='68' width='20' height='6' fill='#d49ac2'/>
+  </g>
+
+  <!-- Pastor (simple cartoon) -->
+  <g transform='translate(600,520)'>
+    <circle cx='0' cy='-70' r='16' fill='#ffe3cf' />
+    <rect x='-16' y='-54' width='32' height='54' fill='#2b2b2b' rx='6'/>
+    <rect x='-4' y='-54' width='8' height='18' fill='#ffd24d'/>
+    <circle cx='-6' cy='-73' r='3' fill='#333'/>
+    <circle cx='6'  cy='-73' r='3' fill='#333'/>
+    <path d='M-6 -63 Q0 -58 6 -63' stroke='#333' fill='none' stroke-width='2'/>
+  </g>
+
+  <!-- Flowers along aisle -->
+  <g>
+    ${Array.from({length:10}).map((_,i)=>{
+      const xLeft  = 520 - 80 - i*25;
+      const xRight = 680 + 80 + i*25;
+      const y = 560 + i*18;
+      return `
+        <circle cx='${xLeft}' cy='${y}' r='6' fill='#ff99c8'/>
+        <rect x='${xLeft-1}' y='${y}' width='2' height='14' fill='#6bbf59'/>
+        <circle cx='${xRight}' cy='${y}' r='6' fill='#b28dff'/>
+        <rect x='${xRight-1}' y='${y}' width='2' height='14' fill='#6bbf59'/>
+      `;
+    }).join('')}
+  </g>
+
+  <!-- Soft hearts in sky -->
+  <g opacity='0.25'>
+    <text x='200' y='140' font-size='48'>💖</text>
+    <text x='1000' y='200' font-size='40'>💕</text>
+    <text x='900' y='100' font-size='48'>💘</text>
+    <text x='150' y='80' font-size='40'>💓</text>
+  </g>
+</svg>`;
+
+    // Encode and set as background (no broken links ever)
+    const encoded = encodeURIComponent(svg).replace(/'/g, "%27").replace(/"/g, "%22");
+    weddingScene.style.backgroundImage = `url("data:image/svg+xml;utf8,${encoded}")`;
     weddingScene.style.display = "block";
+
     bigMessage.style.display = "block";
     bigMessage.textContent = "You made me the happiest man in life ❤️💍";
     launchCelebration();
@@ -243,7 +320,7 @@
       setTimeout(() => heart.remove(), 4000);
     }, 150);
 
-    // Pixel Kitten
+    // Pixel Kitten (base64)
     const kittenBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABm0lEQVRoge2ZsU4CURBFz0VEkC0gmDkRrA7AQbAOxEE4EYF4JNgI7EATgAV0vQIrUzUUhbC+qLkOz3ncwSWn1U6tt/3zTff8MPxBEVRBEVRBFVfCjgDHwAZ0Lzk0uG3E7I4AT4Aj2wA3cADHgM+NBoGfSBJSAVgAIxA+6Ew8CSMylFj0pE8IgH9SxRWhL3sBHEgiJ0g2zlo9ppSgvuxgCCeE3rUwGQAUwFfM6hHDoOrD4VLoEiKfAVfJBByjDMyyV4BTCCvFjHMqSPogNGaQnRjA1FK/UBZxmrkAUgOWzIY8TCfl6gbEoMtuCqKc4yaJROCS7IgGJwB76tREQt1O1NS7O4ZYN34T3VDEahR+DAq6/Ai+dAJ9y4EBTYV/Be8JS28CD0vhNNDzUByfiymxFbC+ZJx6oDsJc4a5eT9iY47y8Vvq3AH1CyNPZog7M4h/QSB6/BUEURUEURUEU9/8AW5rrruU0TDuAAAAAElFTkSuQmCC";
 
     setInterval(() => {
@@ -270,15 +347,15 @@
     }());
   }
 
-  // Position question in center initially
-  questionBox.style.left = ${(window.innerWidth - questionBox.offsetWidth) / 2}px;
-  questionBox.style.top = ${(window.innerHeight - questionBox.offsetHeight) / 2}px;
+  // Center the question box initially
+  questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
+  questionBox.style.top  = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
 
-  // Sparkle animation for ring
+  // Sparkle animation refresh for the ring
   const sparkle = document.querySelector(".sparkle");
   setInterval(() => {
     sparkle.style.animation = "none";
-    sparkle.offsetHeight;
+    sparkle.offsetHeight; // reflow
     sparkle.style.animation = "sparkleMove 1s linear forwards";
   }, 3000);
 </script>
