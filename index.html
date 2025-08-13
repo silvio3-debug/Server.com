@@ -9,7 +9,7 @@
       background-color: pink;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Times New Roman', serif;
+      font-family: Arial, sans-serif;
       position: relative;
     }
     #questionBox {
@@ -20,7 +20,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
-      transition: opacity 0.4s ease;
     }
     #bigMessage {
       font-size: 2rem;
@@ -51,52 +50,31 @@
       background-color: #f44336;
       color: white;
     }
-    .falling {
+    .heart, .kittenFall {
       position: absolute;
-      animation: fallDown 4s linear forwards;
+      animation: fall 4s linear forwards;
       opacity: 0;
     }
-    @keyframes fallDown {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
     }
-    /* Luxurious corner text */
-    #cornerText {
+    #footerNote {
       position: fixed;
       bottom: 10px;
-      left: 10px;
-      font-size: 16px;
+      right: 10px;
+      font-family: 'Georgia', serif;
+      font-size: 1.2rem;
+      color: gold;
       font-weight: bold;
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: linear-gradient(90deg, gold, orange, gold);
-      background-size: 200% auto;
-      color: white;
-      text-shadow: 1px 1px 2px black;
-      animation: goldShine 3s linear infinite;
-      box-shadow: 0 0 10px rgba(255,215,0,0.8);
+      text-shadow: 0 0 5px #fff, 0 0 10px gold, 0 0 20px gold;
+      animation: shine 2s infinite;
+      z-index: 20;
     }
-    @keyframes goldShine {
-      0% { background-position: 0% center; }
-      100% { background-position: 200% center; }
-    }
-    .ring-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-    .sparkle {
-      position: absolute;
-      top: -5px;
-      left: -5px;
-      font-size: 14px;
-      opacity: 0;
-      animation: sparkleMove 1s linear forwards;
-    }
-    @keyframes sparkleMove {
-      0%   { opacity: 0; transform: translate(-10px, 0) rotate(0deg); }
-      20%  { opacity: 1; }
-      80%  { opacity: 1; }
-      100% { opacity: 0; transform: translate(20px, -20px) rotate(180deg); }
+    @keyframes shine {
+      0% { text-shadow: 0 0 5px #fff, 0 0 10px gold, 0 0 20px gold; }
+      50% { text-shadow: 0 0 10px #fff, 0 0 20px gold, 0 0 40px gold; }
+      100% { text-shadow: 0 0 5px #fff, 0 0 10px gold, 0 0 20px gold; }
     }
   </style>
 </head>
@@ -109,14 +87,7 @@
 </div>
 
 <div id="bigMessage">You made me the happiest man in life ❤️</div>
-
-<div id="cornerText">
-  Made by Silvio for his little princess 
-  <span class="ring-wrapper">
-    💍
-    <span class="sparkle">✨</span>
-  </span>
-</div>
+<div id="footerNote">💍 Made by Silvio for his little princess 💍</div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
@@ -128,21 +99,13 @@
 
   const sadMessages = [
     "Why? 😢", "Please :3", "Please my loveeeeeeeeeee 🥺", "Nooo don't say that 😭",
-    "You break my heart 💔", "Come on, just say yes 😘", "I’ll cry... 😭",
-    "Pretty please ❤️", "Think again... 🥹", "Don't be mean 🥺👉👈",
-    "Just once, say yes 😍", "You know you want to 😏", "Please? Pretty please? 🥰",
-    "I'm begginggggggg 🫠", "What if I give you chocolate? 🍫", "I’ll do the dishes forever! 🧽",
-    "Even the laundry! 🧺", "I can make pancakes every morning 🥞", "How about pizza every day? 🍕",
-    "I’ll let you choose the Netflix shows 🎬", "Free massages for life 💆",
-    "I'll write you poems 📜", "Your wish is my command 🪄", "Say yes and I’ll be yours forever 💖",
-    "No?? But I bought flowers 🌹", "Think of the cute couple photos 📸", "What about matching hoodies? 👕",
-    "Fine… but I’ll pout all day 😒", "This is your last chance 😜", "My heart can't take it 💔",
-    "How can you resist this face 🥺", "Even the stars want you to say yes ✨", "Okay, now you’re just teasing me 😏"
+    "You break my heart 💔", "Come on, just say yes 😘", "I’ll cry... 😭", "Pretty please ❤️",
+    "Think about the kittens 🐱", "What if I give you chocolate? 🍫", "My heart can't take this 😔",
+    "Don't make me beg on my knees 🙇‍♂️", "I'll give you all the cuddles 🥰",
+    "But I baked cookies for you 🍪", "Say yes and I’ll be your personal chef 👨‍🍳"
   ];
 
   let currentQuestion = 0;
-  let heartRainInterval;
-  let noClickCount = 0;
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const bigMessage = document.getElementById("bigMessage");
@@ -159,103 +122,26 @@
   }
 
   function handleNo() {
-    noClickCount++;
     const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-    startHeartRain();
-    questionBox.style.opacity = 0;
+    questionText.style.color = "deeppink";
+    questionText.textContent = randomSad;
     setTimeout(() => {
-      questionText.style.color = "deeppink";
-      questionText.textContent = randomSad;
-      questionBox.style.opacity = 1;
-      setTimeout(() => {
-        questionBox.style.opacity = 0;
-        setTimeout(() => {
-          stopHeartRain();
-          questionText.style.color = "black";
-          questionText.textContent = questions[currentQuestion];
-          moveQuestionBox();
-          questionBox.style.opacity = 1;
-        }, 400);
-      }, 1000);
-    }, 400);
+      questionText.style.color = "black";
+      questionText.textContent = questions[currentQuestion];
+      moveQuestionBox();
+    }, 1200);
   }
 
   function moveQuestionBox() {
     const maxX = window.innerWidth - questionBox.offsetWidth;
     const maxY = window.innerHeight - questionBox.offsetHeight;
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-    questionBox.style.left = `${randomX}px`;
-    questionBox.style.top = `${randomY}px`;
-  }
-
-  function startHeartRain() {
-    let intervalSpeed = Math.max(50, 150 - noClickCount * 10);
-    heartRainInterval = setInterval(() => {
-      const heart = document.createElement("div");
-      heart.classList.add("falling");
-      heart.textContent = "💗";
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.top = "-30px";
-      heart.style.fontSize = Math.random() * 20 + 20 + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, intervalSpeed);
-  }
-
-  function stopHeartRain() {
-    clearInterval(heartRainInterval);
+    questionBox.style.left = `${Math.floor(Math.random() * maxX)}px`;
+    questionBox.style.top = `${Math.floor(Math.random() * maxY)}px`;
   }
 
   function launchCelebration() {
-    // Hearts
+    // Hearts falling
     setInterval(() => {
       const heart = document.createElement("div");
-      heart.classList.add("falling");
-      heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.top = "-30px";
-      heart.style.fontSize = Math.random() * 20 + 20 + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, 150);
-
-    // Kittens
-    setInterval(() => {
-      const kitten = document.createElement("img");
-      kitten.src = "https://placekitten.com/50/50";
-      kitten.classList.add("falling");
-      kitten.style.left = Math.random() * window.innerWidth + "px";
-      kitten.style.top = "-50px";
-      kitten.style.width = "50px";
-      kitten.style.height = "50px";
-      kitten.style.borderRadius = "8px";
-      document.body.appendChild(kitten);
-      setTimeout(() => kitten.remove(), 5000);
-    }, 400);
-
-    // Confetti
-    const duration = 5 * 1000;
-    const end = Date.now() + duration;
-    (function frame() {
-      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    }());
-  }
-
-  // Position question in center initially
-  questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
-  questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
-
-  // Sparkle animation for ring
-  const sparkle = document.querySelector(".sparkle");
-  setInterval(() => {
-    sparkle.style.animation = "none";
-    sparkle.offsetHeight;
-    sparkle.style.animation = "sparkleMove 1s linear forwards";
-  }, 3000);
-</script>
-
-</body>
-</html>
+      heart.classList.add("heart");
+      heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];*]()
