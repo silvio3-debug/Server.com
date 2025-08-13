@@ -52,7 +52,7 @@
       color: white;
     }
     .heart {
-      position: absolute;
+      position: fixed;
       animation: floatUp 4s linear forwards;
       pointer-events: none;
     }
@@ -115,40 +115,3 @@
   function launchCelebration() {
     // Hearts floating
     const heartColors = ["❤️", "💖", "💘", "💝", "💕", "💓"];
-    setInterval(() => {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.textContent = heartColors[Math.floor(Math.random() * heartColors.length)];
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.top = window.innerHeight + "px";
-      heart.style.fontSize = Math.random() * 20 + 20 + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, 150);
-
-    // Confetti for 5 seconds
-    const duration = 5 * 1000;
-    const end = Date.now() + duration;
-    (function frame() {
-      confetti({
-        particleCount: 7,
-        spread: 60,
-        origin: { x: Math.random(), y: Math.random() - 0.2 }
-      });
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    })();
-  }
-
-  // Start at center
-  questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
-  questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
-
-  window.addEventListener("resize", () => {
-    moveQuestionBox();
-  });
-</script>
-
-</body>
-</html>
