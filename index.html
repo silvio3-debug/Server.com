@@ -90,7 +90,7 @@
       width: 60px;
       height: 60px;
       pointer-events: none;
-      background: url('https://i.ibb.co/h94xxJg/kitten.png') no-repeat center/contain;
+      background: url('https://i.ibb.co/YLxZGBm/kitten-pixel.png') no-repeat center/contain;
       z-index: 5;
     }
 
@@ -193,16 +193,17 @@
     })();
   }
 
-  // Kitten roaming & chasing
+  // Kitten roaming & chasing random hearts
   let kittenX = 100, kittenY = 100;
   function moveKitten() {
     let targetX = Math.random() * (window.innerWidth - 60);
     let targetY = Math.random() * (window.innerHeight - 60);
 
     if (chasingHearts) {
-      const heart = document.querySelector(".heart");
-      if (heart) {
-        const rect = heart.getBoundingClientRect();
+      const hearts = document.querySelectorAll(".heart");
+      if (hearts.length > 0) {
+        const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
+        const rect = randomHeart.getBoundingClientRect();
         targetX = rect.left;
         targetY = rect.top;
       }
