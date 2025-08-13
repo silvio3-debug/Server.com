@@ -220,15 +220,18 @@
       setTimeout(() => heart.remove(), 4000);
     }, 150);
 
-    // Kittens
+    // Pixel Kitten (Base64)
+    const kittenBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABm0lEQVRoge2ZsU4CURBFz0VEkC0gmDkRrA7AQbAOxEE4EYF4JNgI7EATgAV0vQIrUzUUhbC+qLkOz3ncwSWn1U6tt/3zTff8MPxBEVRBEVRBFVfCjgDHwAZ0Lzk0uG3E7I4AT4Aj2wA3cADHgM+NBoGfSBJSAVgAIxA+6Ew8CSMylFj0pE8IgH9SxRWhL3sBHEgiJ0g2zlo9ppSgvuxgCCeE3rUwGQAUwFfM6hHDoOrD4VLoEiKfAVfJBByjDMyyV4BTCCvFjHMqSPogNGaQnRjA1FK/UBZxmrkAUgOWzIY8TCfl6gbEoMtuCqKc4yaJROCS7IgGJwB76tREQt1O1NS7O4ZYN34T3VDEahR+DAq6/Ai+dAJ9y4EBTYV/Be8JS28CD0vhNNDzUByfiymxFbC+ZJx6oDsJc4a5eT9iY47y8Vvq3AH1CyNPZog7M4h/QSB6/BUEURUEURUEU9/8AW5rrruU0TDuAAAAAElFTkSuQmCC";
+
     setInterval(() => {
       const kitten = document.createElement("img");
-      kitten.src = "https://placekitten.com/50/50";
+      kitten.src = kittenBase64;
       kitten.classList.add("falling");
       kitten.style.left = Math.random() * window.innerWidth + "px";
       kitten.style.top = "-50px";
       kitten.style.width = "50px";
       kitten.style.height = "50px";
+      kitten.style.imageRendering = "pixelated";
       kitten.style.borderRadius = "8px";
       document.body.appendChild(kitten);
       setTimeout(() => kitten.remove(), 5000);
