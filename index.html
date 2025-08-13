@@ -96,8 +96,17 @@
     }
   }
 
-  function handleNo() {
-    moveQuestionBox();
+    function handleNo() {
+  // Show a random sad message
+  const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
+  questionText.textContent = randomSad;
+
+  // After a short delay, switch back to the real question
+  setTimeout(() => {
+    questionText.textContent = questions[currentQuestion];
+    // Removed moveQuestionBox(); so it stays in the same spot
+  }, 1000);
+}
   }
 
   function moveQuestionBox() {
@@ -156,3 +165,4 @@
 
 </body>
 </html>
+
