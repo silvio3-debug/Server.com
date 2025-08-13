@@ -20,6 +20,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
+      transition: opacity 0.4s ease;
     }
     #bigMessage {
       font-size: 2rem;
@@ -60,7 +61,6 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
-    /* Corner text styling */
     #cornerText {
       position: fixed;
       bottom: 10px;
@@ -72,7 +72,6 @@
       padding: 5px 10px;
       border-radius: 8px;
     }
-    /* Sparkle effect over ring */
     .ring-wrapper {
       position: relative;
       display: inline-block;
@@ -120,24 +119,20 @@
   ];
 
   const sadMessages = [
-    "Why? 😢",
-    "Please :3",
-    "Please my loveeeeeeeeeee 🥺",
-    "Nooo don't say that 😭",
-    "You break my heart 💔",
-    "Come on, just say yes 😘",
-    "I’ll cry... 😭",
-    "Pretty please ❤️",
-    "Think again... 🥹",
-    "Don't be mean 🥺👉👈",
-    "Just once, say yes 😍",
-    "You know you want to 😏",
-    "Please? Pretty please? 🥰",
-    "I'm begginggggggg 🫠"
+    "Why? 😢", "Please :3", "Please my loveeeeeeeeeee 🥺", "Nooo don't say that 😭",
+    "You break my heart 💔", "Come on, just say yes 😘", "I’ll cry... 😭",
+    "Pretty please ❤️", "Think again... 🥹", "Don't be mean 🥺👉👈",
+    "Just once, say yes 😍", "You know you want to 😏", "Please? Pretty please? 🥰",
+    "I'm begginggggggg 🫠", "What if I give you chocolate? 🍫", "I’ll do the dishes forever! 🧽",
+    "Even the laundry! 🧺", "I can make pancakes every morning 🥞", "How about pizza every day? 🍕",
+    "I’ll let you choose the Netflix shows 🎬", "Free massages for life 💆",
+    "I'll write you poems 📜", "Your wish is my command 🪄", "Say yes and I’ll be yours forever 💖",
+    "No?? But I bought flowers 🌹", "Think of the cute couple photos 📸", "What about matching hoodies? 👕",
+    "Fine… but I’ll pout all day 😒", "This is your last chance 😜", "My heart can't take it 💔",
+    "How can you resist this face 🥺", "Even the stars want you to say yes ✨", "Okay, now you’re just teasing me 😏"
   ];
 
   let currentQuestion = 0;
-
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const bigMessage = document.getElementById("bigMessage");
@@ -155,14 +150,21 @@
 
   function handleNo() {
     const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-    questionText.style.color = "deeppink";
-    questionText.textContent = randomSad;
-
+    questionBox.style.opacity = 0; // fade out
     setTimeout(() => {
-      questionText.style.color = "black";
-      questionText.textContent = questions[currentQuestion];
-      moveQuestionBox();
-    }, 1000);
+      questionText.style.color = "deeppink";
+      questionText.textContent = randomSad;
+      questionBox.style.opacity = 1; // fade in
+      setTimeout(() => {
+        questionBox.style.opacity = 0; // fade out again
+        setTimeout(() => {
+          questionText.style.color = "black";
+          questionText.textContent = questions[currentQuestion];
+          moveQuestionBox();
+          questionBox.style.opacity = 1; // fade in original question
+        }, 400);
+      }, 1000);
+    }, 400);
   }
 
   function moveQuestionBox() {
@@ -198,10 +200,13 @@
   questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
   questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
 
-  // Make sparkle appear every 3 seconds
   const sparkle = document.querySelector(".sparkle");
   setInterval(() => {
     sparkle.style.animation = "none";
-    sparkle.offsetHeight; // restart animation
-    sparkle.style.animation = "";
-    sparkle.classList.add("sparkle-mov
+    sparkle.offsetHeight;
+    sparkle.style.animation = "sparkleMove 1s linear forwards";
+  }, 3000);
+</script>
+
+</body>
+</html>
