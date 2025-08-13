@@ -12,7 +12,6 @@
       font-family: Arial, sans-serif;
       position: relative;
     }
-
     #questionBox {
       position: absolute;
       background: white;
@@ -21,8 +20,8 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
+      transition: opacity 0.5s ease;
     }
-
     #bigMessage {
       font-size: 2rem;
       color: red;
@@ -36,7 +35,6 @@
       transform: translate(-50%, -50%);
       z-index: 10;
     }
-
     button {
       margin: 8px;
       padding: 10px 16px;
@@ -45,7 +43,6 @@
       cursor: pointer;
       font-size: 1rem;
     }
-
     .yesBtn {
       background-color: #4CAF50;
       color: white;
@@ -54,56 +51,31 @@
       background-color: #f44336;
       color: white;
     }
-
     .heart {
       position: absolute;
       font-size: 24px;
       animation: rainDown 4s linear forwards;
       opacity: 0;
     }
-
     @keyframes rainDown {
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
-
-    .madeBy {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      background: linear-gradient(90deg, gold, orange, gold);
-      background-size: 200% auto;
-      color: transparent;
-      background-clip: text;
-      -webkit-background-clip: text;
-      animation: shine 3s linear infinite;
-    }
-
-    @keyframes shine {
-      to { background-position: 200% center; }
-    }
-
-    #kitten {
+    .kitten {
       position: absolute;
-      width: 60px;
-      height: 60px;
-      pointer-events: none;
-      background: url('https://i.ibb.co/YLxZGBm/kitten-pixel.png') no-repeat center/contain;
+      width: 80px;
       z-index: 5;
+      pointer-events: none;
+      transition: transform 0.3s ease;
     }
-
-    .paw {
-      position: absolute;
-      font-size: 16px;
-      opacity: 0.6;
-      animation: fadePaw 1s linear forwards;
+    .bounce {
+      animation: kittenBounce 0.4s ease;
     }
-
-    @keyframes fadePaw {
-      from { opacity: 0.6; }
-      to { opacity: 0; }
+    @keyframes kittenBounce {
+      0%   { transform: translateY(0) scale(1); }
+      30%  { transform: translateY(-20px) scale(1.1); }
+      60%  { transform: translateY(0) scale(0.95); }
+      100% { transform: translateY(0) scale(1); }
     }
   </style>
 </head>
@@ -116,8 +88,8 @@
 </div>
 
 <div id="bigMessage">You made me the happiest man in life ❤️</div>
-<div class="madeBy">💍 Made by Silvio for his little princess</div>
-<div id="kitten"></div>
+
+<img id="kitten" class="kitten" src="https://i.imgur.com/V0X3KFk.png" style="display:none;">
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
@@ -128,15 +100,12 @@
   ];
 
   const sadMessages = [
-    "Why? 😢","Please :3","Please my loveeeeeeeeeee 🥺","Nooo don't say that 😭","You break my heart 💔",
-    "Come on, just say yes 😘","I’ll cry... 😭","Pretty please ❤️","You’re killing me softly 😭",
-    "One little yes won’t hurt 😏","Think about our future 🏡","Don’t do me like this 😭",
-    "How could you say no to this face 🥹","I’ll be sad forever 😭","Just once, pleaaase ❤️"
+    "Why? 😢", "Please :3", "Please my loveeeeeeeeeee 🥺", "Nooo don't say that 😭",
+    "You break my heart 💔", "Come on, just say yes 😘", "I’ll cry... 😭", "Pretty please ❤️",
+    "You’re my everything 😔", "Don’t hurt my poor heart 💕", "Just one little yes 🙏"
   ];
 
   let currentQuestion = 0;
-  let chasingHearts = false;
-
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const bigMessage = document.getElementById("bigMessage");
@@ -150,33 +119,36 @@
       questionBox.style.display = "none";
       bigMessage.style.display = "block";
       launchCelebration();
-      chasingHearts = true;
+      kitten.style.display = "block";
+      moveKitten();
     }
   }
 
   function handleNo() {
     const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-    questionText.style.color = "deeppink";
     questionText.textContent = randomSad;
+    questionBox.style.opacity = 0; // start fade
     setTimeout(() => {
-      questionText.style.color = "black";
-      questionText.textContent = questions[currentQuestion];
       moveQuestionBox();
-    }, 1000);
+      questionText.textContent = questions[currentQuestion];
+      questionBox.style.opacity = 1; // fade back in
+    }, 500);
   }
 
   function moveQuestionBox() {
     const maxX = window.innerWidth - questionBox.offsetWidth;
     const maxY = window.innerHeight - questionBox.offsetHeight;
-    questionBox.style.left = `${Math.floor(Math.random() * maxX)}px`;
-    questionBox.style.top = `${Math.floor(Math.random() * maxY)}px`;
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+    questionBox.style.left = `${randomX}px`;
+    questionBox.style.top = `${randomY}px`;
   }
 
   function launchCelebration() {
     setInterval(() => {
       const heart = document.createElement("div");
       heart.classList.add("heart");
-      heart.textContent = ["❤️","💖","💕","💘","💓"][Math.floor(Math.random()*5)];
+      heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];
       heart.style.left = Math.random() * window.innerWidth + "px";
       heart.style.top = "-30px";
       heart.style.fontSize = Math.random() * 20 + 20 + "px";
@@ -187,57 +159,24 @@
     const duration = 5 * 1000;
     const end = Date.now() + duration;
     (function frame() {
-      confetti({particleCount: 5, angle: 60, spread: 55, origin: {x: 0}});
-      confetti({particleCount: 5, angle: 120, spread: 55, origin: {x: 1}});
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
       if (Date.now() < end) requestAnimationFrame(frame);
-    })();
+    }());
   }
 
-  // Kitten roaming & chasing random hearts
-  let kittenX = 100, kittenY = 100;
   function moveKitten() {
-    let targetX = Math.random() * (window.innerWidth - 60);
-    let targetY = Math.random() * (window.innerHeight - 60);
-
-    if (chasingHearts) {
-      const hearts = document.querySelectorAll(".heart");
-      if (hearts.length > 0) {
-        const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
-        const rect = randomHeart.getBoundingClientRect();
-        targetX = rect.left;
-        targetY = rect.top;
-      }
+    const hearts = document.getElementsByClassName("heart");
+    if (hearts.length > 0) {
+      const target = hearts[Math.floor(Math.random() * hearts.length)];
+      const targetRect = target.getBoundingClientRect();
+      kitten.style.left = targetRect.left + "px";
+      kitten.style.top = targetRect.top + "px";
+      kitten.classList.add("bounce");
+      setTimeout(() => kitten.classList.remove("bounce"), 400);
     }
-
-    const stepX = (targetX - kittenX) / 60;
-    const stepY = (targetY - kittenY) / 60;
-    let steps = 0;
-
-    function step() {
-      kittenX += stepX;
-      kittenY += stepY;
-      kitten.style.left = kittenX + "px";
-      kitten.style.top = kittenY + "px";
-
-      const paw = document.createElement("div");
-      paw.classList.add("paw");
-      paw.textContent = "🐾";
-      paw.style.left = kittenX + 20 + "px";
-      paw.style.top = kittenY + 40 + "px";
-      document.body.appendChild(paw);
-      setTimeout(() => paw.remove(), 1000);
-
-      steps++;
-      if (steps < 60) {
-        requestAnimationFrame(step);
-      } else {
-        setTimeout(moveKitten, 500);
-      }
-    }
-    step();
+    setTimeout(moveKitten, Math.random() * 800 + 500); // random speed for realism
   }
-
-  moveKitten();
 
   questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
   questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
