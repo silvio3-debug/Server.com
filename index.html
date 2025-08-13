@@ -1,39 +1,74 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html>
 <head>
-    <title>My Cloud Website</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Filter Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            padding: 20px;
         }
-        header {
+        .buttons {
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
             background: #333;
             color: white;
-            padding: 20px;
-            font-size: 24px;
-        }
-        main {
-            padding: 40px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
             cursor: pointer;
+        }
+        .buttons button:hover {
+            background: #555;
+        }
+        .item {
+            display: inline-block;
+            background: #eee;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+            width: 150px;
         }
     </style>
 </head>
 <body>
-    <header>Welcome to My Cloud Website</header>
-    <main>
-        <h1>Hello, World!</h1>
-        <p>This site runs entirely in the cloud 🚀</p>
-        <button onclick="alert('You clicked the button!')">Click Me</button>
-    </main>
+
+    <h1>Category Filter</h1>
+
+    <!-- Filter Buttons -->
+    <div class="buttons">
+        <button onclick="filterSelection('all')"> Show All </button>
+        <button onclick="filterSelection('fruit')"> Fruits </button>
+        <button onclick="filterSelection('vegetable')"> Vegetables </button>
+        <button onclick="filterSelection('drink')"> Drinks </button>
+    </div>
+
+    <!-- Items -->
+    <div id="items">
+        <div class="item fruit">🍎 Apple</div>
+        <div class="item fruit">🍌 Banana</div>
+        <div class="item vegetable">🥕 Carrot</div>
+        <div class="item vegetable">🥦 Broccoli</div>
+        <div class="item drink">🥤 Cola</div>
+        <div class="item drink">☕ Coffee</div>
+    </div>
+
+    <script>
+        function filterSelection(category) {
+            let items = document.getElementsByClassName("item");
+            if (category === "all") category = "";
+            for (let i = 0; i < items.length; i++) {
+                let item = items[i];
+                if (item.className.indexOf(category) > -1 || category === "") {
+                    item.style.display = "inline-block";
+                } else {
+                    item.style.display = "none";
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>
+
