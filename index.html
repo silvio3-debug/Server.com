@@ -32,6 +32,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 10;
     }
     button {
       margin: 8px;
@@ -49,6 +50,15 @@
       background-color: #f44336;
       color: white;
     }
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 4s linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -61,6 +71,7 @@
 
 <div id="bigMessage">You made me the happiest man in life ❤️</div>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
   const questions = [
     "Do you want to be my girlfriend?",
@@ -80,6 +91,7 @@
     } else {
       questionBox.style.display = "none";
       bigMessage.style.display = "block";
+      launchCelebration();
     }
   }
 
@@ -96,6 +108,44 @@
 
     questionBox.style.left = `${randomX}px`;
     questionBox.style.top = `${randomY}px`;
+  }
+
+  // Celebration function
+  function launchCelebration() {
+    // Hearts
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = window.innerHeight + "px";
+      heart.style.fontSize = Math.random() * 20 + 20 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }, 200);
+
+    // Confetti
+    const duration = 5 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
   }
 
   // Start in the middle
