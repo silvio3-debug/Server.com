@@ -20,6 +20,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       text-align: center;
       max-width: 300px;
+      transition: left 0.2s ease, top 0.2s ease;
     }
     #bigMessage {
       font-size: 2rem;
@@ -35,7 +36,7 @@
       z-index: 10;
     }
     #questionText.sad {
-      color: deeppink; /* Sad text in pink */
+      color: deeppink;
       font-style: italic;
     }
     button {
@@ -102,7 +103,7 @@
   const bigMessage = document.getElementById("bigMessage");
 
   function handleYes() {
-    questionText.classList.remove("sad"); // remove pink style
+    questionText.classList.remove("sad");
     currentQuestion++;
     if (currentQuestion < questions.length) {
       questionText.textContent = questions[currentQuestion];
@@ -114,49 +115,4 @@
   }
 
   function handleNo() {
-    const randomSad = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-    questionText.textContent = randomSad;
-    questionText.classList.add("sad"); // make text pink
-  }
-
-  function launchCelebration() {
-    setInterval(() => {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.textContent = ["❤️", "💖", "💕", "💘", "💓"][Math.floor(Math.random() * 5)];
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.top = "-30px";
-      heart.style.fontSize = Math.random() * 20 + 20 + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, 150);
-
-    const duration = 5 * 1000;
-    const end = Date.now() + duration;
-
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    }());
-  }
-
-  questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
-  questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
-</script>
-
-</body>
-</html>
+    const randomSad = sadMessages[Math.floor(Math.random() * sa*]()
