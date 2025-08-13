@@ -9,10 +9,8 @@
       background-color: pink;
       height: 100vh;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       font-family: Arial, sans-serif;
+      position: relative;
     }
     #questionBox {
       position: absolute;
@@ -30,6 +28,10 @@
       display: none;
       text-align: center;
       padding: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     button {
       margin: 8px;
@@ -96,13 +98,9 @@
     questionBox.style.top = `${randomY}px`;
   }
 
-  // Start at center
+  // Start in the middle
   questionBox.style.left = `${(window.innerWidth - questionBox.offsetWidth) / 2}px`;
   questionBox.style.top = `${(window.innerHeight - questionBox.offsetHeight) / 2}px`;
-
-  window.addEventListener("resize", () => {
-    moveQuestionBox();
-  });
 </script>
 
 </body>
