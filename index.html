@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Category Filter Example</title>
+    <title>My Website</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,34 +66,6 @@
             z-index: 999;
         }
 
-        /* Category filter styling */
-        .buttons {
-            margin-bottom: 20px;
-        }
-        .buttons button {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            background: #333;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .buttons button:hover {
-            background: #555;
-        }
-        .buttons button.active {
-            background: #ff6600;
-        }
-        .item {
-            display: inline-block;
-            background: #eee;
-            padding: 15px;
-            margin: 10px;
-            border-radius: 5px;
-            width: 150px;
-        }
-
         main {
             padding: 20px;
             text-align: center;
@@ -121,47 +93,11 @@
 
     <!-- Main content -->
     <main>
-        <h1 id="category">Category Filter</h1>
-
-        <!-- Filter Buttons -->
-        <div class="buttons" id="filterButtons">
-            <button class="active" onclick="filterSelection('all', this)"> Show All </button>
-            <button onclick="filterSelection('fruit', this)"> Fruits </button>
-            <button onclick="filterSelection('vegetable', this)"> Vegetables </button>
-            <button onclick="filterSelection('drink', this)"> Drinks </button>
-        </div>
-
-        <!-- Items -->
-        <div id="items">
-            <div class="item fruit">🍎 Apple</div>
-            <div class="item fruit">🍌 Banana</div>
-            <div class="item vegetable">🥕 Carrot</div>
-            <div class="item vegetable">🥦 Broccoli</div>
-            <div class="item drink">🥤 Cola</div>
-            <div class="item drink">☕ Coffee</div>
-        </div>
+        <h1>Welcome</h1>
+        <p>Click the ☰ icon to open the menu.</p>
     </main>
 
     <script>
-        // Category filter
-        function filterSelection(category, btn) {
-            let items = document.getElementsByClassName("item");
-            if (category === "all") category = "";
-            for (let i = 0; i < items.length; i++) {
-                let item = items[i];
-                if (item.className.indexOf(category) > -1 || category === "") {
-                    item.style.display = "inline-block";
-                } else {
-                    item.style.display = "none";
-                }
-            }
-
-            let buttons = document.querySelectorAll("#filterButtons button");
-            buttons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-        }
-
-        // Menu control
         function openMenu() {
             document.getElementById("sideMenu").style.width = "250px";
             document.getElementById("overlay").style.display = "block";
